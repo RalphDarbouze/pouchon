@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pouchon de Pouchon Ville</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0c3b2e 0%, #1b5e20 50%, #2e7d32 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(to right, rgba(30, 87, 32, 0.9), rgba(46, 125, 50, 0.9));
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 3px solid #ffd700;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #ffd700, #ff6b00, #ffd700);
+        }
+        
+        .game-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            background: linear-gradient(to right, #ffd700, #ff6b00, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .game-subtitle {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .haitian-flag {
+            display: inline-block;
+            width: 30px;
+            height: 20px;
+            background: linear-gradient(to right, #00209f 33%, transparent 33%, transparent 66%, #d21034 66%);
+            border: 1px solid white;
+            vertical-align: middle;
+            margin: 0 10px;
+        }
+        
+        .game-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .game-area {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+        
+        #gameCanvas {
+            background: linear-gradient(to bottom, #0c3b2e 0%, #1b5e20 100%);
+            border: 4px solid #ffd700;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+            width: 100%;
+            height: 600px;
+            display: block;
+        }
+        
+        .game-ui {
+            width: 300px;
+            min-width: 280px;
+            background: rgba(30, 87, 32, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 3px solid #ff6b00;
+        }
+        
+        .stats {
+            margin-bottom: 30px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid;
+            transition: transform 0.3s;
+        }
+        
+        .stat-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .stat-label {
+            font-weight: 600;
+            color: #ffd700;
+            font-size: 1.1rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        #scoreValue {
+            color: #4caf50;
+            border-left-color: #4caf50;
+        }
+        
+        #livesValue {
+            color: #ff6b00;
+            border-left-color: #ff6b00;
+        }
+        
+        #hitsValue {
+            color: #ffd700;
+            border-left-color: #ffd700;
+        }
+        
+        .hit-progress {
+            width: 100%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        #hitProgress {
+            height: 100%;
+            background: linear-gradient(to right, #4caf50, #ffd700, #ff6b00);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        
+        .controls {
+            background: rgba(255, 107, 0, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .controls h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            text-align: center;
+        }
+        
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            justify-items: center;
+        }
+        
+        .key {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(145deg, #1b5e20, #2e7d32);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid #ffd700;
+            transition: all 0.2s;
+            color: white;
+        }
+        
+        .key:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(145deg, #2e7d32, #388e3c);
+        }
+        
+        .key.active {
+            background: linear-gradient(145deg, #ff6b00, #ffd700);
+            transform: translateY(2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .game-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, rgba(30, 87, 32, 0.95), rgba(46, 125, 50, 0.95));
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 100;
+            display: none;
+            border: 4px solid #ffd700;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.6);
+            min-width: 450px;
+            max-width: 90%;
+            backdrop-filter: blur(10px);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.6); }
+            50% { box-shadow: 0 0 80px rgba(255, 215, 0, 0.8); }
+            100% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.6); }
+        }
+        
+        .message-icon {
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite alternate;
+        }
+        
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+        
+        .message-text {
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            line-height: 1.3;
+        }
+        
+        .message-subtext {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .controls-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 18px 35px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            min-width: 180px;
+        }
+        
+        #restartBtn {
+            background: linear-gradient(to right, #ff6b00, #ffd700);
+            color: #1b5e20;
+            font-weight: 700;
+        }
+        
+        #startBtn {
+            background: linear-gradient(to right, #4caf50, #2e7d32);
+            color: white;
+            font-weight: 700;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .instructions {
+            background: rgba(30, 87, 32, 0.8);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 20px;
+            border: 3px solid #4caf50;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .instructions h3 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .instructions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .instruction-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #ff6b00;
+            transition: transform 0.3s;
+        }
+        
+        .instruction-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .instruction-card h4 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .item-types {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .item-type {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            min-width: 180px;
+            justify-content: center;
+        }
+        
+        .item-icon {
+            font-size: 2.5rem;
+        }
+        
+        .diplomat-icon { color: #ff6b00; }
+        .certificate-icon { color: #ffd700; }
+        
+        .hit-message {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 107, 0, 0.9);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            z-index: 90;
+            display: none;
+            border: 3px solid #ffd700;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            min-width: 500px;
+            max-width: 90%;
+        }
+        
+        .hit-text {
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 2.2rem;
+        }
+        
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            padding: 25px;
+            color: #ffd700;
+            font-size: 1rem;
+            border-top: 2px solid rgba(255, 215, 0, 0.3);
+            width: 100%;
+            background: rgba(30, 87, 32, 0.5);
+            border-radius: 15px;
+        }
+        
+        .counter {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            color: #ff6b00;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .game-container {
+                flex-direction: column;
+            }
+            
+            .game-ui {
+                width: 100%;
+            }
+            
+            .game-title {
+                font-size: 2.5rem;
+            }
+            
+            .game-subtitle {
+                font-size: 1.4rem;
+            }
+            
+            #gameCanvas {
+                height: 500px;
+            }
+            
+            .game-message {
+                min-width: 90%;
+                padding: 30px;
+            }
+            
+            .message-text {
+                font-size: 2rem;
+            }
+            
+            .hit-message {
+                min-width: 90%;
+                font-size: 1.6rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #gameCanvas {
+                height: 400px;
+            }
+            
+            .game-title {
+                font-size: 2rem;
+            }
+            
+            .game-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .message-text {
+                font-size: 1.6rem;
+            }
+            
+            .key {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                min-width: 140px;
+                padding: 15px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="game-title">Pouchon de Pouchon Ville</h1>
+            <div class="game-subtitle">Men diplome Mr Darbouze yo pouchon de pouchon ville</div>
+            <div style="margin-top: 15px;">
+                <span class="haitian-flag"></span>
+                <span style="color: #ffd700;">Chache diplòm yo, men fè atansyon!</span>
+                <span class="haitian-flag"></span>
+            </div>
+        </header>
+        
+        <div class="game-container">
+            <div class="game-area">
+                <canvas id="gameCanvas" width="800" height="600"></canvas>
+                
+                <div class="game-message" id="gameMessage">
+                    <div class="message-icon">🎓</div>
+                    <div class="message-text" id="messageText">Pouchon de Pouchon Ville</div>
+                    <div class="message-subtext" id="messageSubtext">Men diplome Mr Darbouze yo!</div>
+                    <div class="controls-buttons">
+                        <button class="btn" id="startBtn">Kòmanse Jwèt la</button>
+                        <button class="btn" id="restartBtn">Jwe Ankò</button>
+                    </div>
+                </div>
+                
+                <div class="hit-message" id="hitMessage">
+                    <div class="hit-text" id="hitText"></div>
+                </div>
+            </div>
+            
+            <div class="game-ui">
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-label">POINTS</span>
+                        <span class="stat-value" id="scoreValue">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">VI</span>
+                        <span class="stat-value" id="livesValue">3</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">FRAP</span>
+                        <span class="stat-value" id="hitsValue">0/50</span>
+                    </div>
+                    <div class="hit-progress">
+                        <div id="hitProgress"></div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <h3>KONTWÒL</h3>
+                    <div class="keyboard">
+                        <div class="key" id="keyA">A</div>
+                        <div class="key" id="keyLeft">←</div>
+                        <div class="key" id="keyD">D</div>
+                        <div class="key" id="keyS">S</div>
+                        <div class="key" id="keyDown">↓</div>
+                        <div class="key" id="keyRight">→</div>
+                    </div>
+                    <p style="margin-top: 20px; color: #ffd700; text-align: center; font-size: 1.1rem;">
+                        Sèvi ak A/D oswa flèch pou deplase
+                    </p>
+                </div>
+                
+                <div style="margin-top: 30px; text-align: center;">
+                    <p style="color: #ff6b00; margin-bottom: 15px; font-size: 1.3rem; font-weight: bold;">
+                        ⚠️ Veye pou sa yo:
+                    </p>
+                    <div class="item-types">
+                        <div class="item-type">
+                            <span class="item-icon diplomat-icon">👔</span>
+                            <span style="font-weight: bold;">Diplomat</span>
+                        </div>
+                        <div class="item-type">
+                            <span class="item-icon certificate-icon">📜</span>
+                            <span style="font-weight: bold;">Sètifika</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; background: rgba(255, 215, 0, 0.1); padding: 15px; border-radius: 10px;">
+                    <p style="color: #4caf50; text-align: center; font-size: 0.9rem;">
+                        <span class="counter">50</span> frap total pou fen jwèt la<br>
+                        Chak frap: +1 pwen, -1 vi
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>RÈG JWÈT LA & MESAJ ESPESYAL</h3>
+            <p style="text-align: center; margin-bottom: 20px; color: #fff;">
+                Chache diplòm yo nan Pouchon de Pouchon Ville! Veye pou diplomat yo ak sètifika yo.
+            </p>
+            
+            <div class="instructions-grid">
+                <div class="instruction-card">
+                    <h4>💥 Lè yon diplomat frape:</h4>
+                    <p style="color: #ffd700; font-weight: 600; margin-top: 15px; font-size: 1.3rem;">
+                        "Pouchon de pouchon ville, men diplome Mr DARBOUZE"
+                    </p>
+                    <p style="color: #4caf50; font-size: 1rem; margin-top: 10px;">
+                        (Ou jwenn yon diplòm espesyal Mr Darbouze!)
+                    </p>
+                </div>
+                
+                <div class="instruction-card">
+                    <h4>📝 Lè yon sètifika frape:</h4>
+                    <p style="color: #ffd700; font-weight: 600; margin-top: 15px; font-size: 1.3rem;">
+                        "Bagay yo pa piyay ce pa don yo yie"
+                    </p>
+                    <p style="color: #4caf50; font-size: 1rem; margin-top: 10px;">
+                        (Papye yo ap vin plis!)
+                    </p>
+                </div>
+                
+                <div class="instruction-card">
+                    <h4>🎯 Konsey pou Jwè yo</h4>
+                    <ul style="padding-left: 20px; margin-top: 15px; list-style-type: none;">
+                        <li style="margin-bottom: 8px; color: #fff;">✓ Rete mobil - pa rete nan yon sèl plas</li>
+                        <li style="margin-bottom: 8px; color: #fff;">✓ Gade modèl yo - bagay yo ap vini pi vit</li>
+                        <li style="margin-bottom: 8px; color: #fff;">✓ Diplomat yo deplase pi vit pase sètifika</li>
+                        <li style="margin-bottom: 8px; color: #fff;">✓ 50 frap total pou fen jwèt la</li>
+                        <li style="margin-bottom: 8px; color: #fff;">✓ Chak nivo ogmante difikilte a</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Pouchon de Pouchon Ville | Men diplome Mr Darbouze yo | Kreye pou GitHub</p>
+            <p style="margin-top: 15px; color: #ff6b00; font-size: 1.1rem;">
+                Sèvi ak flèch oswa A/D pou jwe | ESPAS pou kanpe/kontinye | Antre pou rekòmanse
+            </p>
+            <p style="margin-top: 10px; font-size: 0.9rem; color: #4caf50;">
+                Objektif la: Siviv 50 frap diplomat ak sètifika!
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreValue = document.getElementById('scoreValue');
+        const livesValue = document.getElementById('livesValue');
+        const hitsValue = document.getElementById('hitsValue');
+        const hitProgress = document.getElementById('hitProgress');
+        const gameMessage = document.getElementById('gameMessage');
+        const messageText = document.getElementById('messageText');
+        const messageSubtext = document.getElementById('messageSubtext');
+        const hitMessage = document.getElementById('hitMessage');
+        const hitText = document.getElementById('hitText');
+        const restartBtn = document.getElementById('restartBtn');
+        const startBtn = document.getElementById('startBtn');
+
+        // Game variables
+        let score = 0;
+        let lives = 3;
+        let hits = 0;
+        let totalHits = 50;
+        let level = 1;
+        let gameOver = false;
+        let gameRunning = false;
+        let gamePaused = false;
+        let fallingItems = [];
+        let lastSpawnTime = 0;
+        let spawnRate = 1200;
+        let animationId = null;
+        let lastTime = 0;
+        let showHitMessage = false;
+        let hitMessageTimer = 0;
+        let hitMessageDuration = 6000; // 6 seconds
+
+        // Player properties
+        const player = {
+            x: canvas.width / 2 - 30,
+            y: canvas.height - 140,
+            width: 60,
+            height: 120,
+            speed: 8,
+            faceColor: '#8B4513',
+            hairColor: '#1C2833',
+            shirtColor: '#3498DB',
+            pantsColor: '#2C3E50',
+            shoesColor: '#E74C3C',
+            direction: 1,
+            animationFrame: 0,
+            
+            draw() {
+                // Body (shirt)
+                ctx.fillStyle = this.shirtColor;
+                ctx.fillRect(this.x, this.y + 40, this.width, 50);
+                
+                // Head (25-year-old Black man)
+                ctx.fillStyle = this.faceColor;
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.width/2, this.y + 30, 25, 30, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Hair (short, modern cut)
+                ctx.fillStyle = this.hairColor;
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.width/2, this.y + 15, 28, 20, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Eyes
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.width/2 - 10, this.y + 25, 5, 7, 0, 0, Math.PI * 2);
+                ctx.ellipse(this.x + this.width/2 + 10, this.y + 25, 5, 7, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#1C2833';
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.width/2 - 10, this.y + 25, 3, 4, 0, 0, Math.PI * 2);
+                ctx.ellipse(this.x + this.width/2 + 10, this.y + 25, 3, 4, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Eyebrows
+                ctx.fillStyle = this.hairColor;
+                ctx.fillRect(this.x + this.width/2 - 15, this.y + 18, 10, 3);
+                ctx.fillRect(this.x + this.width/2 + 5, this.y + 18, 10, 3);
+                
+                // Nose
+                ctx.fillStyle = this.faceColor;
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.width/2, this.y + 35, 4, 5, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Mouth with smile
+                ctx.strokeStyle = '#E74C3C';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(this.x + this.width/2, this.y + 45, 8, 0.1 * Math.PI, 0.9 * Math.PI);
+                ctx.stroke();
+                
+                // Ears
+                ctx.fillStyle = this.faceColor;
+                ctx.beginPath();
+                ctx.ellipse(this.x - 2, this.y + 30, 6, 10, 0, 0, Math.PI * 2);
+                ctx.ellipse(this.x + this.width + 2, this.y + 30, 6, 10, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Pants
+                ctx.fillStyle = this.pantsColor;
+                ctx.fillRect(this.x, this.y + 90, this.width, 30);
+                
+                // Legs
+                ctx.fillStyle = '#34495E';
+                ctx.fillRect(this.x + 10, this.y + 120, 15, 25);
+                ctx.fillRect(this.x + 35, this.y + 120, 15, 25);
+                
+                // Shoes
+                ctx.fillStyle = this.shoesColor;
+                ctx.fillRect(this.x + 8, this.y + 145, 20, 8);
+                ctx.fillRect(this.x + 33, this.y + 145, 20, 8);
+                
+                // Arms (with animation)
+                const armSwing = Math.sin(this.animationFrame * 0.2) * 10 * this.direction;
+                ctx.fillStyle = this.shirtColor;
+                ctx.fillRect(this.x - 15 - armSwing/2, this.y + 50, 15, 10);
+                ctx.fillRect(this.x + this.width + armSwing/2, this.y + 50, 15, 10);
+            },
+            
+            update() {
+                this.animationFrame++;
+            }
+        };
+
+        // Haitian-inspired Background
+        class Background {
+            constructor() {
+                this.buildings = [];
+                this.palms = [];
+                this.initBuildings();
+                this.initPalms();
+            }
+            
+            initBuildings() {
+                // Create colorful Haitian-style buildings
+                for (let i = 0; i < 10; i++) {
+                    const x = i * 80;
+                    const width = 60 + Math.random() * 40;
+                    const height = 100 + Math.random() * 250;
+                    const colors = ['#E74C3C', '#F39C12', '#3498DB', '#2ECC71', '#9B59B6'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    this.buildings.push({ x, width, height, color });
+                }
+            }
+            
+            initPalms() {
+                for (let i = 0; i < 8; i++) {
+                    const x = i * 100 + 20;
+                    const height = 80 + Math.random() * 60;
+                    this.palms.push({ x, height });
+                }
+            }
+            
+            draw() {
+                // Sky gradient (Haitian colors: blue and red)
+                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                gradient.addColorStop(0, '#0c3b2e');
+                gradient.addColorStop(0.5, '#1b5e20');
+                gradient.addColorStop(1, '#2e7d32');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Sun
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(canvas.width - 80, 80, 40, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Sun rays
+                ctx.strokeStyle = 'rgba(255, 215, 0, 0.4)';
+                ctx.lineWidth = 3;
+                for (let i = 0; i < 12; i++) {
+                    const angle = (i * Math.PI) / 6;
+                    const startX = canvas.width - 80 + Math.cos(angle) * 45;
+                    const startY = 80 + Math.sin(angle) * 45;
+                    const endX = canvas.width - 80 + Math.cos(angle) * 70;
+                    const endY = 80 + Math.sin(angle) * 70;
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(endX, endY);
+                    ctx.stroke();
+                }
+                
+                // Palm trees
+                this.palms.forEach(palm => {
+                    // Trunk
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(palm.x, canvas.height - palm.height - 50, 15, palm.height);
+                    
+                    // Leaves
+                    ctx.fillStyle = '#27ae60';
+                    for (let i = 0; i < 6; i++) {
+                        const angle = (i * Math.PI) / 3;
+                        ctx.beginPath();
+                        ctx.moveTo(palm.x + 7, canvas.height - palm.height - 50);
+                        ctx.lineTo(palm.x + 7 + Math.cos(angle) * 40, canvas.height - palm.height - 50 + Math.sin(angle) * 40);
+                        ctx.lineTo(palm.x + 7 + Math.cos(angle + 0.3) * 30, canvas.height - palm.height - 50 + Math.sin(angle + 0.3) * 30);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+                });
+                
+                // Buildings
+                this.buildings.forEach(building => {
+                    // Building shadow
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                    ctx.fillRect(building.x + 5, canvas.height - building.height + 5, building.width, building.height);
+                    
+                    // Building with Haitian colors
+                    ctx.fillStyle = building.color;
+                    ctx.fillRect(building.x, canvas.height - building.height, building.width, building.height);
+                    
+                    // Decorative details
+                    ctx.fillStyle = '#FFD700';
+                    ctx.fillRect(building.x, canvas.height - building.height, building.width, 10);
+                    
+                    // Windows
+                    ctx.fillStyle = '#FFF';
+                    for (let floor = 0; floor < Math.floor(building.height / 40); floor++) {
+                        for (let col = 0; col < Math.floor(building.width / 25); col++) {
+                            if (Math.random() > 0.6) {
+                                ctx.fillStyle = Math.random() > 0.5 ? '#F1C40F' : '#FFF';
+                                ctx.fillRect(
+                                    building.x + 8 + col * 25,
+                                    canvas.height - building.height + 20 + floor * 40,
+                                    15, 25
+                                );
+                            }
+                        }
+                    }
+                });
+                
+                // Street
+                ctx.fillStyle = '#34495E';
+                ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+                
+                // Street lines (Haitian flag colors)
+                ctx.fillStyle = '#00209F';
+                ctx.fillRect(0, canvas.height - 45, 40, 5);
+                ctx.fillStyle = '#D21034';
+                ctx.fillRect(80, canvas.height - 45, 40, 5);
+                ctx.fillStyle = '#00209F';
+                ctx.fillRect(160, canvas.height - 45, 40, 5);
+                ctx.fillStyle = '#D21034';
+                ctx.fillRect(240, canvas.height - 45, 40, 5);
+                
+                // Street market stalls
+                ctx.fillStyle = '#E67E22';
+                ctx.fillRect(50, canvas.height - 80, 60, 30);
+                ctx.fillRect(200, canvas.height - 90, 70, 40);
+                ctx.fillRect(350, canvas.height - 85, 65, 35);
+                
+                // Market items (colorful dots)
+                for (let i = 0; i < 20; i++) {
+                    ctx.fillStyle = ['#E74C3C', '#F1C40F', '#2ECC71', '#3498DB'][Math.floor(Math.random() * 4)];
+                    ctx.beginPath();
+                    ctx.arc(80 + Math.random() * 500, canvas.height - 70 + Math.random() * 20, 3 + Math.random() * 4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        // Falling Item Class
+        class FallingItem {
+            constructor(type) {
+                this.type = type;
+                this.width = type === 'diplomat' ? 50 : 40;
+                this.height = type === 'diplomat' ? 70 : 50;
+                this.x = Math.random() * (canvas.width - this.width);
+                this.y = -this.height;
+                this.speed = 3 + Math.random() * 2 + (level * 0.4);
+                this.rotation = 0;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.08;
+                this.color = type === 'diplomat' ? '#E74C3C' : '#F1C40F';
+                this.glowColor = type === 'diplomat' ? 'rgba(231, 80, 57, 0.7)' : 'rgba(241, 196, 15, 0.7)';
+                this.pulse = 0;
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.translate(this.x + this.width/2, this.y + this.height/2);
+                ctx.rotate(this.rotation);
+                
+                // Pulse animation
+                this.pulse += 0.1;
+                const pulseSize = 1 + Math.sin(this.pulse) * 0.1;
+                
+                // Glow effect
+                ctx.shadowColor = this.glowColor;
+                ctx.shadowBlur = 20;
+                
+                // Main shape
+                ctx.fillStyle = this.color;
+                ctx.scale(pulseSize, 1);
+                ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height);
+                ctx.scale(1/pulseSize, 1);
+                
+                // Icon
+                ctx.fillStyle = 'white';
+                ctx.font = '28px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.type === 'diplomat' ? '👔' : '📜', 0, 0);
+                
+                // Border
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(-this.width/2, -this.height/2, this.width, this.height);
+                
+                // Type text
+                ctx.fillStyle = '#FFF';
+                ctx.font = 'bold 14px Arial';
+                ctx.fillText(this.type === 'diplomat' ? 'DIPLOMAT' : 'SÈTIFIKA', 0, -40);
+                
+                ctx.restore();
+            }
+            
+            update() {
+                this.y += this.speed;
+                this.rotation += this.rotationSpeed;
+                this.x += Math.sin(Date.now() * 0.001 + this.y * 0.01) * 1;
+            }
+            
+            isOffScreen() {
+                return this.y > canvas.height;
+            }
+            
+            collidesWith(obj) {
+                return this.x < obj.x + obj.width &&
+                       this.x + this.width > obj.x &&
+                       this.y < obj.y + obj.height &&
+                       this.y + this.height > obj.y;
+            }
+        }
+
+        // Game objects
+        const background = new Background();
+        const keys = {};
+
+        // Initialize game
+        function init() {
+            gameMessage.style.display = 'block';
+            messageText.textContent = 'Pouchon de Pouchon Ville';
+            messageSubtext.textContent = 'Men diplome Mr Darbouze yo!';
+        }
+
+        // Start game
+        function startGame() {
+            score = 0;
+            lives = 3;
+            hits = 0;
+            level = 1;
+            gameOver = false;
+            gameRunning = true;
+            gamePaused = false;
+            fallingItems = [];
+            spawnRate = 1200;
+            player.x = canvas.width / 2 - 30;
+            player.y = canvas.height - 140;
+            showHitMessage = false;
+            
+            updateUI();
+            gameMessage.style.display = 'none';
+            hitMessage.style.display = 'none';
+            
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            lastTime = performance.now();
+            gameLoop();
+        }
+
+        // Game loop
+        function gameLoop(timestamp) {
+            if (!gameRunning || gamePaused) return;
+            
+            const deltaTime = timestamp - lastTime || 0;
+            lastTime = timestamp;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw background
+            background.draw();
+            
+            // Spawn items
+            if (timestamp - lastSpawnTime > spawnRate) {
+                const types = ['diplomat', 'certificate'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                fallingItems.push(new FallingItem(type));
+                lastSpawnTime = timestamp;
+                
+                // Increase difficulty
+                if (score > 0 && score % 10 === 0) {
+                    level++;
+                    spawnRate = Math.max(500, spawnRate - 100);
+                }
+            }
+            
+            // Update and draw items
+            for (let i = fallingItems.length - 1; i >= 0; i--) {
+                const item = fallingItems[i];
+                item.update();
+                item.draw();
+                
+                // Check collision
+                if (item.collidesWith(player)) {
+                    fallingItems.splice(i, 1);
+                    hits++;
+                    lives--;
+                    
+                    // Show appropriate message for 6 seconds
+                    if (item.type === 'diplomat') {
+                        showHitMessageFor("Pouchon de pouchon ville, men diplome Mr DARBOUZE", 6000);
+                    } else {
+                        // Random chance for second message with certificates
+                        if (Math.random() < 0.5) {
+                            showHitMessageFor("Bagay yo pa piyay ce pa don yo yie", 6000);
+                        }
+                    }
+                    
+                    updateUI();
+                    
+                    // Check if game ends (50 hits)
+                    if (hits >= totalHits) {
+                        gameOver = true;
+                        showGameOver();
+                    } else if (lives <= 0) {
+                        gameOver = true;
+                        showGameOver();
+                    }
+                    continue;
+                }
+                
+                // Remove off-screen items and add score
+                if (item.isOffScreen()) {
+                    fallingItems.splice(i, 1);
+                    score += level > 3 ? 2 : 1;
+                    updateUI();
+                }
+            }
+            
+            // Update hit message timer
+            if (showHitMessage) {
+                hitMessageTimer += deltaTime;
+                if (hitMessageTimer >= hitMessageDuration) {
+                    showHitMessage = false;
+                    hitMessage.style.display = 'none';
+                }
+            }
+            
+            // Update and draw player
+            updatePlayer(deltaTime);
+            player.draw();
+            player.update();
+            
+            // Draw HUD
+            drawHUD();
+            
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        // Show hit message
+        function showHitMessageFor(text, duration) {
+            hitText.textContent = text;
+            hitMessage.style.display = 'block';
+            showHitMessage = true;
+            hitMessageTimer = 0;
+            hitMessageDuration = duration;
+            
+            // Add shaking effect
+            hitMessage.style.animation = 'none';
+            setTimeout(() => {
+                hitMessage.style.animation = 'bounce 0.5s';
+            }, 10);
+        }
+
+        // Update player position
+        function updatePlayer(deltaTime) {
+            const speed = player.speed * (deltaTime / 16);
+            
+            if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
+                player.x = Math.max(10, player.x - speed);
+                player.direction = -1;
+            }
+            if (keys['ArrowRight'] || keys['d'] || keys['D']) {
+                player.x = Math.min(canvas.width - player.width - 10, player.x + speed);
+                player.direction = 1;
+            }
+        }
+
+        // Draw HUD
+        function drawHUD() {
+            // Score display
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(10, 10, 220, 90);
+            
+            ctx.fillStyle = '#FFD700';
+            ctx.font = 'bold 22px Montserrat';
+            ctx.fillText(`POINTS: ${score}`, 20, 40);
+            ctx.fillText(`NIVO: ${level}`, 20, 70);
+            ctx.fillText(`FRAP: ${hits}/${totalHits}`, 20, 100);
+            
+            // Lives as hearts
+            for (let i = 0; i < lives; i++) {
+                ctx.fillStyle = '#E74C3C';
+                ctx.beginPath();
+                ctx.arc(canvas.width - 40 - i * 35, 45, 15, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = 'white';
+                ctx.font = '24px Arial';
+                ctx.fillText('❤', canvas.width - 48 - i * 35, 53);
+            }
+            
+            // Pause indicator
+            if (gamePaused) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#FFD700';
+                ctx.font = 'bold 60px Montserrat';
+                ctx.textAlign = 'center';
+                ctx.fillText('KANPE', canvas.width/2, canvas.height/2 - 50);
+                ctx.font = 'bold 30px Montserrat';
+                ctx.fillText('Peze ESPAS pou kontinye', canvas.width/2, canvas.height/2 + 30);
+                ctx.textAlign = 'left';
+            }
+            
+            // Game over overlay
+            if (gameOver) {
+                ctx.fillStyle = 'rgba(231, 76, 60, 0.9)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#FFD700';
+                ctx.font = 'bold 70px Montserrat';
+                ctx.textAlign = 'center';
+                ctx.fillText('FINI!', canvas.width/2, canvas.height/2 - 80);
+                ctx.font = 'bold 30px Montserrat';
+                ctx.fillText(`Final: ${score} Pwen | ${hits} Frap`, canvas.width/2, canvas.height/2);
+                ctx.font = 'bold 25px Montserrat';
+                ctx.fillText('Peze Antre pou rekòmanse', canvas.width/2, canvas.height/2 + 60);
+                ctx.textAlign = 'left';
+            }
+        }
+
+        // Update UI
+        function updateUI() {
+            scoreValue.textContent = score;
+            livesValue.textContent = lives;
+            hitsValue.textContent = `${hits}/${totalHits}`;
+            hitProgress.style.width = `${(hits / totalHits) * 100}%`;
+        }
+
+        // Game over
+        function showGameOver() {
+            messageText.textContent = hits >= totalHits ? "50 FRAP ATENN!" : "PA GEN PLIS VI!";
+            messageSubtext.textContent = `Final: ${score} Pwen | ${hits} Frap`;
+            gameMessage.style.display = 'block';
+            gameRunning = false;
+        }
+
+        // Keyboard controls
+        window.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+            
+            // Update key visuals
+            const keyMap = {
+                'ArrowLeft': 'keyLeft',
+                'ArrowRight': 'keyRight',
+                'ArrowDown': 'keyDown',
+                'a': 'keyA',
+                'd': 'keyD',
+                's': 'keyS'
+            };
+            
+            if (keyMap[e.key]) {
+                document.getElementById(keyMap[e.key]).classList.add('active');
+            }
+            
+            // Space to pause/resume
+            if (e.key === ' ' && gameRunning && !gameOver) {
+                e.preventDefault();
+                gamePaused = !gamePaused;
+                if (!gamePaused) {
+                    lastTime = performance.now();
+                    gameLoop();
+                }
+            }
+            
+            // Enter to start/restart
+            if (e.key === 'Enter') {
+                if (!gameRunning || gameOver) {
+                    startGame();
+                }
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+            
+            // Update key visuals
+            const keyMap = {
+                'ArrowLeft': 'keyLeft',
+                'ArrowRight': 'keyRight',
+                'ArrowDown': 'keyDown',
+                'a': 'keyA',
+                'd': 'keyD',
+                's': 'keyS'
+            };
+            
+            if (keyMap[e.key]) {
+                document.getElementById(keyMap[e.key]).classList.remove('active');
+            }
+        });
+
+        // Button event listeners
+        restartBtn.addEventListener('click', startGame);
+        startBtn.addEventListener('click', startGame);
+
+        // Touch controls for mobile
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const x = touch.clientX - rect.left;
+            
+            if (x < canvas.width / 2) {
+                keys['ArrowLeft'] = true;
+                document.getElementById('keyLeft').classList.add('active');
+            } else {
+                keys['ArrowRight'] = true;
+                document.getElementById('keyRight').classList.add('active');
+            }
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            keys['ArrowLeft'] = false;
+            keys['ArrowRight'] = false;
+            document.getElementById('keyLeft').classList.remove('active');
+            document.getElementById('keyRight').classList.remove('active');
+        });
+
+        // Initialize
+        window.addEventListener('load', () => {
+            init();
+            // Adjust canvas size
+            const container = canvas.parentElement;
+            const resizeCanvas = () => {
+                const containerWidth = container.clientWidth;
+                const aspectRatio = 800/600;
+                canvas.width = containerWidth;
+                canvas.height = containerWidth / aspectRatio;
+            };
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+        });
+    </script>
+</body>
+</html>
