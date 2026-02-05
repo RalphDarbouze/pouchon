@@ -159,9 +159,14 @@
             border-left-color: #ff6b00;
         }
         
-        #hitsValue {
+        #certsValue {
             color: #ffd700;
             border-left-color: #ffd700;
+        }
+        
+        #diplomatsValue {
+            color: #ff6b00;
+            border-left-color: #ff6b00;
         }
         
         .hit-progress {
@@ -543,8 +548,12 @@
                         <span class="stat-value" id="livesValue">3</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">FRAP</span>
-                        <span class="stat-value" id="hitsValue">0/50</span>
+                        <span class="stat-label">SÈTIFIKA</span>
+                        <span class="stat-value" id="certsValue">0/500</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">DIPLOMAT</span>
+                        <span class="stat-value" id="diplomatsValue">0/250</span>
                     </div>
                     <div class="hit-progress">
                         <div id="hitProgress"></div>
@@ -584,8 +593,10 @@
                 
                 <div style="margin-top: 30px; background: rgba(255, 215, 0, 0.1); padding: 15px; border-radius: 10px;">
                     <p style="color: #4caf50; text-align: center; font-size: 0.9rem;">
-                        <span class="counter">50</span> frap total pou fen jwèt la<br>
-                        Chak frap: +1 pwen, -1 vi
+                        <span class="counter">500</span> sètifika pou genyen<br>
+                        <span class="counter">OU BIEN</span><br>
+                        <span class="counter">250</span> diplomat pou genyen<br>
+                        Chak diplomat: -1 vi
                     </p>
                 </div>
             </div>
@@ -604,7 +615,7 @@
                         "Pouchon de pouchon ville, men diplome Mr DARBOUZE"
                     </p>
                     <p style="color: #4caf50; font-size: 1rem; margin-top: 10px;">
-                        (Ou jwenn yon diplòm espesyal Mr Darbouze!)
+                        (Ou jwenn yon diplòm espesyal Mr Darbouze! -1 VI)
                     </p>
                 </div>
                 
@@ -614,7 +625,7 @@
                         "Bagay yo pa piyay ce pa don yo yie"
                     </p>
                     <p style="color: #4caf50; font-size: 1rem; margin-top: 10px;">
-                        (Papye yo ap vin plis!)
+                        (Papye yo ap vin plis! +5 Pwen)
                     </p>
                 </div>
                 
@@ -624,7 +635,7 @@
                         <li style="margin-bottom: 8px; color: #fff;">✓ Rete mobil - pa rete nan yon sèl plas</li>
                         <li style="margin-bottom: 8px; color: #fff;">✓ Gade modèl yo - bagay yo ap vini pi vit</li>
                         <li style="margin-bottom: 8px; color: #fff;">✓ Diplomat yo deplase pi vit pase sètifika</li>
-                        <li style="margin-bottom: 8px; color: #fff;">✓ 50 frap total pou fen jwèt la</li>
+                        <li style="margin-bottom: 8px; color: #fff;">✓ 500 sètifika OU 250 diplomat pou genyen</li>
                         <li style="margin-bottom: 8px; color: #fff;">✓ Chak nivo ogmante difikilte a</li>
                     </ul>
                 </div>
@@ -632,12 +643,12 @@
         </div>
         
         <footer>
-            <p>Pouchon de Pouchon Ville | Men diplome Mr Darbouze yo | Kreye pou kimoune nou yie Par don Ralph Darbouze  :) </p>
+            <p>Pouchon de Pouchon Ville | Men diplome Mr Darbouze yo | Kreye pou kimoune nou yie Par don Ralph Darbouze  :)</p>
             <p style="margin-top: 15px; color: #ff6b00; font-size: 1.1rem;">
                 Sèvi ak flèch oswa A/D pou jwe | ESPAS pou kanpe/kontinye | Antre pou rekòmanse
             </p>
             <p style="margin-top: 10px; font-size: 0.9rem; color: #4caf50;">
-                Objektif la: Siviv 50 frap diplomat ak sètifika!
+                Objektif la: Ramase 500 sètifika OU 250 diplomat pou genyen!
             </p>
         </footer>
     </div>
@@ -647,7 +658,8 @@
         const ctx = canvas.getContext('2d');
         const scoreValue = document.getElementById('scoreValue');
         const livesValue = document.getElementById('livesValue');
-        const hitsValue = document.getElementById('hitsValue');
+        const certsValue = document.getElementById('certsValue');
+        const diplomatsValue = document.getElementById('diplomatsValue');
         const hitProgress = document.getElementById('hitProgress');
         const gameMessage = document.getElementById('gameMessage');
         const messageText = document.getElementById('messageText');
@@ -660,8 +672,10 @@
         // Game variables
         let score = 0;
         let lives = 3;
-        let hits = 0;
-        let totalHits = 50;
+        let certificatesCollected = 0;
+        let diplomatsCollected = 0;
+        let totalCertificatesNeeded = 500;
+        let totalDiplomatsNeeded = 250;
         let level = 1;
         let gameOver = false;
         let gameRunning = false;
@@ -997,7 +1011,8 @@
         function startGame() {
             score = 0;
             lives = 3;
-            hits = 0;
+            certificatesCollected = 0;
+            diplomatsCollected = 0;
             level = 1;
             gameOver = false;
             gameRunning = true;
@@ -1055,25 +1070,23 @@
                 // Check collision
                 if (item.collidesWith(player)) {
                     fallingItems.splice(i, 1);
-                    hits++;
-                    lives--;
                     
-                    // Show appropriate message for 6 seconds
                     if (item.type === 'diplomat') {
+                        diplomatsCollected++;
+                        lives--; // Only lose life for diplomats
                         showHitMessageFor("Pouchon de pouchon ville, men diplome Mr DARBOUZE", 6000);
-                    } else {
-                        // Random chance for second message with certificates
-                        if (Math.random() < 0.5) {
-                            showHitMessageFor("Bagay yo pa piyay ce pa don yo yie", 6000);
-                        }
+                    } else if (item.type === 'certificate') {
+                        certificatesCollected++;
+                        score += 5; // Give more points for certificates
+                        showHitMessageFor("Bagay yo pa piyay ce pa don yo yie", 6000);
                     }
                     
                     updateUI();
                     
-                    // Check if game ends (50 hits)
-                    if (hits >= totalHits) {
+                    // Check win conditions
+                    if (certificatesCollected >= totalCertificatesNeeded || diplomatsCollected >= totalDiplomatsNeeded) {
                         gameOver = true;
-                        showGameOver();
+                        showWin();
                     } else if (lives <= 0) {
                         gameOver = true;
                         showGameOver();
@@ -1109,6 +1122,21 @@
             animationId = requestAnimationFrame(gameLoop);
         }
 
+        // Show win message
+        function showWin() {
+            let winMessage = "";
+            if (certificatesCollected >= totalCertificatesNeeded) {
+                winMessage = `500 Sètifika RANMASI!`;
+                messageText.textContent = "OU GENYEN!";
+            } else {
+                winMessage = `250 Diplomat RANMASI!`;
+                messageText.textContent = "OU GENYEN!";
+            }
+            messageSubtext.textContent = `${winMessage} Final: ${score} Pwen`;
+            gameMessage.style.display = 'block';
+            gameRunning = false;
+        }
+
         // Show hit message
         function showHitMessageFor(text, duration) {
             hitText.textContent = text;
@@ -1122,6 +1150,14 @@
             setTimeout(() => {
                 hitMessage.style.animation = 'bounce 0.5s';
             }, 10);
+        }
+
+        // Game over
+        function showGameOver() {
+            messageText.textContent = "PA GEN PLIS VI!";
+            messageSubtext.textContent = `Final: ${score} Pwen | ${certificatesCollected} Sètifika | ${diplomatsCollected} Diplomat`;
+            gameMessage.style.display = 'block';
+            gameRunning = false;
         }
 
         // Update player position
@@ -1142,13 +1178,14 @@
         function drawHUD() {
             // Score display
             ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            ctx.fillRect(10, 10, 220, 90);
+            ctx.fillRect(10, 10, 280, 110);
             
             ctx.fillStyle = '#FFD700';
-            ctx.font = 'bold 22px Montserrat';
-            ctx.fillText(`POINTS: ${score}`, 20, 40);
-            ctx.fillText(`NIVO: ${level}`, 20, 70);
-            ctx.fillText(`FRAP: ${hits}/${totalHits}`, 20, 100);
+            ctx.font = 'bold 18px Montserrat';
+            ctx.fillText(`POINTS: ${score}`, 20, 35);
+            ctx.fillText(`NIVO: ${level}`, 20, 60);
+            ctx.fillText(`SÈTIFIKA: ${certificatesCollected}/500`, 20, 85);
+            ctx.fillText(`DIPLOMAT: ${diplomatsCollected}/250`, 20, 110);
             
             // Lives as hearts
             for (let i = 0; i < lives; i++) {
@@ -1183,9 +1220,10 @@
                 ctx.textAlign = 'center';
                 ctx.fillText('FINI!', canvas.width/2, canvas.height/2 - 80);
                 ctx.font = 'bold 30px Montserrat';
-                ctx.fillText(`Final: ${score} Pwen | ${hits} Frap`, canvas.width/2, canvas.height/2);
+                ctx.fillText(`Final: ${score} Pwen`, canvas.width/2, canvas.height/2);
+                ctx.fillText(`${certificatesCollected} Sètifika | ${diplomatsCollected} Diplomat`, canvas.width/2, canvas.height/2 + 40);
                 ctx.font = 'bold 25px Montserrat';
-                ctx.fillText('Peze Antre pou rekòmanse', canvas.width/2, canvas.height/2 + 60);
+                ctx.fillText('Peze Antre pou rekòmanse', canvas.width/2, canvas.height/2 + 90);
                 ctx.textAlign = 'left';
             }
         }
@@ -1194,16 +1232,14 @@
         function updateUI() {
             scoreValue.textContent = score;
             livesValue.textContent = lives;
-            hitsValue.textContent = `${hits}/${totalHits}`;
-            hitProgress.style.width = `${(hits / totalHits) * 100}%`;
-        }
-
-        // Game over
-        function showGameOver() {
-            messageText.textContent = hits >= totalHits ? "50 FRAP ATENN!" : "PA GEN PLIS VI!";
-            messageSubtext.textContent = `Final: ${score} Pwen | ${hits} Frap`;
-            gameMessage.style.display = 'block';
-            gameRunning = false;
+            certsValue.textContent = `${certificatesCollected}/${totalCertificatesNeeded}`;
+            diplomatsValue.textContent = `${diplomatsCollected}/${totalDiplomatsNeeded}`;
+            
+            // Update progress bar based on whichever is closer to completion
+            const certProgress = certificatesCollected / totalCertificatesNeeded;
+            const dipProgress = diplomatsCollected / totalDiplomatsNeeded;
+            const maxProgress = Math.max(certProgress, dipProgress) * 100;
+            hitProgress.style.width = `${maxProgress}%`;
         }
 
         // Keyboard controls
@@ -1305,5 +1341,4 @@
         });
     </script>
 </body>
-
 </html>
