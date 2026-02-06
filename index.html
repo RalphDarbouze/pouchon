@@ -164,9 +164,9 @@
             border-left-color: #ffd700;
         }
         
-        #diplomatsValue {
-            color: #ff6b00;
-            border-left-color: #ff6b00;
+        #opponentValueUI2 {
+            color: #ff4081;
+            border-left-color: #ff4081;
         }
         
         .hit-progress {
@@ -324,77 +324,6 @@
             box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
         }
         
-        .instructions {
-            background: rgba(30, 87, 32, 0.8);
-            padding: 30px;
-            border-radius: 20px;
-            margin-top: 20px;
-            border: 3px solid #4caf50;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-        }
-        
-        .instructions h3 {
-            color: #ffd700;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-            text-align: center;
-            text-transform: uppercase;
-        }
-        
-        .instructions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
-        }
-        
-        .instruction-card {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 25px;
-            border-radius: 15px;
-            border-left: 5px solid #ff6b00;
-            transition: transform 0.3s;
-        }
-        
-        .instruction-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .instruction-card h4 {
-            color: #ffd700;
-            margin-bottom: 15px;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .item-types {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-        
-        .item-type {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            min-width: 180px;
-            justify-content: center;
-        }
-        
-        .item-icon {
-            font-size: 2.5rem;
-        }
-        
-        .diplomat-icon { color: #ff6b00; }
-        .certificate-icon { color: #ffd700; }
-        
         .hit-message {
             position: absolute;
             top: 30%;
@@ -402,23 +331,23 @@
             transform: translateX(-50%);
             background: rgba(255, 107, 0, 0.9);
             color: white;
-            padding: 20px 30px;
-            border-radius: 15px;
-            font-size: 2rem;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 1.2rem;
             font-weight: bold;
             text-align: center;
             z-index: 90;
             display: none;
-            border: 3px solid #ffd700;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            min-width: 500px;
-            max-width: 90%;
+            border: 2px solid #ffd700;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            min-width: 250px;
+            max-width: 80%;
         }
         
         .hit-text {
             color: #ffd700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            font-size: 2.2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            font-size: 1.4rem;
         }
         
         footer {
@@ -436,8 +365,10 @@
         .counter {
             font-family: 'Montserrat', sans-serif;
             font-size: 1.5rem;
-            color: #ff6b00;
+            color: #ff4081;
             font-weight: bold;
+            text-align: right;
+            margin-bottom: 15px;
         }
         
         @media (max-width: 768px) {
@@ -472,7 +403,7 @@
             
             .hit-message {
                 min-width: 90%;
-                font-size: 1.6rem;
+                font-size: 1.2rem;
             }
         }
         
@@ -518,6 +449,8 @@
             </div>
         </header>
         
+        <div class="counter">Pitit Pouchon left: <span id="opponentValueUI">200</span></div>
+        
         <div class="game-container">
             <div class="game-area">
                 <canvas id="gameCanvas" width="800" height="600"></canvas>
@@ -544,16 +477,16 @@
                         <span class="stat-value" id="scoreValue">0</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">VI</span>
-                        <span class="stat-value" id="livesValue">3</span>
+                        <span class="stat-label">MISSED</span>
+                        <span class="stat-value" id="livesValue">0</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">SÈTIFIKA</span>
-                        <span class="stat-value" id="certsValue">0/500</span>
+                        <span class="stat-label">COLLECTED</span>
+                        <span class="stat-value" id="certsValue">0/200</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">DIPLOMAT</span>
-                        <span class="stat-value" id="diplomatsValue">0/250</span>
+                        <span class="stat-label">PITIT POUCHON LEFT</span>
+                        <span class="stat-value" id="opponentValueUI2">200</span>
                     </div>
                     <div class="hit-progress">
                         <div id="hitProgress"></div>
@@ -575,69 +508,13 @@
                     </p>
                 </div>
                 
-                <div style="margin-top: 30px; text-align: center;">
-                    <p style="color: #ff6b00; margin-bottom: 15px; font-size: 1.3rem; font-weight: bold;">
-                        ⚠️ Veye pou sa yo:
-                    </p>
-                    <div class="item-types">
-                        <div class="item-type">
-                            <span class="item-icon diplomat-icon">👔</span>
-                            <span style="font-weight: bold;">Diplomat</span>
-                        </div>
-                        <div class="item-type">
-                            <span class="item-icon certificate-icon">📜</span>
-                            <span style="font-weight: bold;">Sètifika</span>
-                        </div>
-                    </div>
-                </div>
-                
                 <div style="margin-top: 30px; background: rgba(255, 215, 0, 0.1); padding: 15px; border-radius: 10px;">
                     <p style="color: #4caf50; text-align: center; font-size: 0.9rem;">
-                        <span class="counter">500</span> sètifika pou genyen<br>
+                        <span class="counter">200</span> kolekte pou genyen<br>
                         <span class="counter">OU BIEN</span><br>
-                        <span class="counter">250</span> diplomat pou genyen<br>
-                        Chak diplomat: -1 vi
+                        <span class="counter">50</span> rate pou pèdi<br>
+                        Bat Pitit Pouchon ki ap kolekte tou!
                     </p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="instructions">
-            <h3>RÈG JWÈT LA & MESAJ ESPESYAL</h3>
-            <p style="text-align: center; margin-bottom: 20px; color: #fff;">
-                Chache diplòm yo nan Pouchon de Pouchon Ville! Veye pou diplomat yo ak sètifika yo.
-            </p>
-            
-            <div class="instructions-grid">
-                <div class="instruction-card">
-                    <h4>💥 Lè yon diplomat frape:</h4>
-                    <p style="color: #ffd700; font-weight: 600; margin-top: 15px; font-size: 1.3rem;">
-                        "Pouchon de pouchon ville, men diplome Mr DARBOUZE"
-                    </p>
-                    <p style="color: #4caf50; font-size: 1rem; margin-top: 10px;">
-                        (Ou jwenn yon diplòm espesyal Mr Darbouze! -1 VI)
-                    </p>
-                </div>
-                
-                <div class="instruction-card">
-                    <h4>📝 Lè yon sètifika frape:</h4>
-                    <p style="color: #ffd700; font-weight: 600; margin-top: 15px; font-size: 1.3rem;">
-                        "Bagay yo pa piyay ce pa don yo yie"
-                    </p>
-                    <p style="color: #4caf50; font-size: 1rem; margin-top: 10px;">
-                        (Papye yo ap vin plis! +5 Pwen)
-                    </p>
-                </div>
-                
-                <div class="instruction-card">
-                    <h4>🎯 Konsey pou Jwè yo</h4>
-                    <ul style="padding-left: 20px; margin-top: 15px; list-style-type: none;">
-                        <li style="margin-bottom: 8px; color: #fff;">✓ Rete mobil - pa rete nan yon sèl plas</li>
-                        <li style="margin-bottom: 8px; color: #fff;">✓ Gade modèl yo - bagay yo ap vini pi vit</li>
-                        <li style="margin-bottom: 8px; color: #fff;">✓ Diplomat yo deplase pi vit pase sètifika</li>
-                        <li style="margin-bottom: 8px; color: #fff;">✓ 500 sètifika OU 250 diplomat pou genyen</li>
-                        <li style="margin-bottom: 8px; color: #fff;">✓ Chak nivo ogmante difikilte a</li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -648,7 +525,7 @@
                 Sèvi ak flèch oswa A/D pou jwe | ESPAS pou kanpe/kontinye | Antre pou rekòmanse
             </p>
             <p style="margin-top: 10px; font-size: 0.9rem; color: #4caf50;">
-                Objektif la: Ramase 500 sètifika OU 250 diplomat pou genyen!
+                Objektif la: Ramase 200 diplòm/sètifika san rate 50! Bat Pitit Pouchon!
             </p>
         </footer>
     </div>
@@ -659,7 +536,8 @@
         const scoreValue = document.getElementById('scoreValue');
         const livesValue = document.getElementById('livesValue');
         const certsValue = document.getElementById('certsValue');
-        const diplomatsValue = document.getElementById('diplomatsValue');
+        const opponentValueUI = document.getElementById('opponentValueUI');
+        const opponentValueUI2 = document.getElementById('opponentValueUI2');
         const hitProgress = document.getElementById('hitProgress');
         const gameMessage = document.getElementById('gameMessage');
         const messageText = document.getElementById('messageText');
@@ -671,11 +549,10 @@
 
         // Game variables
         let score = 0;
-        let lives = 3;
+        let missedItems = 0;
         let certificatesCollected = 0;
-        let diplomatsCollected = 0;
-        let totalCertificatesNeeded = 500;
-        let totalDiplomatsNeeded = 250;
+        let totalItemsNeeded = 200;
+        let maxMissed = 50;
         let level = 1;
         let gameOver = false;
         let gameRunning = false;
@@ -687,9 +564,9 @@
         let lastTime = 0;
         let showHitMessage = false;
         let hitMessageTimer = 0;
-        let hitMessageDuration = 6000; // 6 seconds
+        let hitMessageDuration = 2000;
 
-        // Player properties
+        // Player properties - Realistic Black male
         const player = {
             x: canvas.width / 2 - 30,
             y: canvas.height - 140,
@@ -709,7 +586,7 @@
                 ctx.fillStyle = this.shirtColor;
                 ctx.fillRect(this.x, this.y + 40, this.width, 50);
                 
-                // Head (25-year-old Black man)
+                // Head (realistic Black male)
                 ctx.fillStyle = this.faceColor;
                 ctx.beginPath();
                 ctx.ellipse(this.x + this.width/2, this.y + 30, 25, 30, 0, 0, Math.PI * 2);
@@ -745,7 +622,7 @@
                 ctx.ellipse(this.x + this.width/2, this.y + 35, 4, 5, 0, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Mouth with smile
+                // Mouth
                 ctx.strokeStyle = '#E74C3C';
                 ctx.lineWidth = 2;
                 ctx.beginPath();
@@ -785,37 +662,104 @@
             }
         };
 
-        // Haitian-inspired Background
+        // Pitit Pouchon properties
+        const opponent = {
+            x: canvas.width / 3,
+            y: canvas.height - 140,
+            width: 60,
+            height: 120,
+            speed: 5,
+            faceColor: '#8B4513',
+            hairColor: '#2C3E50',
+            shirtColor: '#E74C3C',
+            pantsColor: '#34495E',
+            shoesColor: '#95A5A6',
+            collected: 0,
+            direction: 1,
+            
+            draw() {
+                // Body (shirt)
+                ctx.fillStyle = this.shirtColor;
+                ctx.fillRect(this.x, this.y + 40, this.width, 50);
+                
+                // Head
+                ctx.fillStyle = this.faceColor;
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.width/2, this.y + 30, 25, 30, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Hair
+                ctx.fillStyle = this.hairColor;
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.width/2, this.y + 15, 28, 20, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Eyes
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.width/2 - 10, this.y + 25, 5, 7, 0, 0, Math.PI * 2);
+                ctx.ellipse(this.x + this.width/2 + 10, this.y + 25, 5, 7, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#1C2833';
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.width/2 - 10, this.y + 25, 3, 4, 0, 0, Math.PI * 2);
+                ctx.ellipse(this.x + this.width/2 + 10, this.y + 25, 3, 4, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Pitit Pouchon label
+                ctx.fillStyle = '#FF4081';
+                ctx.font = 'bold 12px Arial';
+                ctx.fillText('PITIT POUCHON', this.x + this.width/2 - 45, this.y + 10);
+            },
+            
+            update() {
+                // AI: Move toward nearest falling item
+                if (fallingItems.length > 0) {
+                    let nearestItem = fallingItems[0];
+                    let minDistance = Math.abs(nearestItem.x - this.x);
+                    
+                    for (let item of fallingItems) {
+                        const distance = Math.abs(item.x - this.x);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            nearestItem = item;
+                        }
+                    }
+                    
+                    if (nearestItem.x < this.x) {
+                        this.x -= this.speed;
+                        this.direction = -1;
+                    } else if (nearestItem.x > this.x + this.width) {
+                        this.x += this.speed;
+                        this.direction = 1;
+                    }
+                    
+                    // Keep within bounds
+                    this.x = Math.max(10, Math.min(canvas.width - this.width - 10, this.x));
+                }
+            }
+        };
+
+        // Background
         class Background {
             constructor() {
                 this.buildings = [];
-                this.palms = [];
                 this.initBuildings();
-                this.initPalms();
             }
             
             initBuildings() {
-                // Create colorful Haitian-style buildings
-                for (let i = 0; i < 10; i++) {
-                    const x = i * 80;
-                    const width = 60 + Math.random() * 40;
-                    const height = 100 + Math.random() * 250;
-                    const colors = ['#E74C3C', '#F39C12', '#3498DB', '#2ECC71', '#9B59B6'];
-                    const color = colors[Math.floor(Math.random() * colors.length)];
-                    this.buildings.push({ x, width, height, color });
-                }
-            }
-            
-            initPalms() {
                 for (let i = 0; i < 8; i++) {
-                    const x = i * 100 + 20;
-                    const height = 80 + Math.random() * 60;
-                    this.palms.push({ x, height });
+                    const x = i * 100;
+                    const height = 150 + Math.random() * 150;
+                    const colors = ['#2C3E50', '#34495E', '#7F8C8D'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    this.buildings.push({ x, height, color });
                 }
             }
             
             draw() {
-                // Sky gradient (Haitian colors: blue and red)
+                // Sky
                 const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
                 gradient.addColorStop(0, '#0c3b2e');
                 gradient.addColorStop(0.5, '#1b5e20');
@@ -823,71 +767,17 @@
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
-                // Sun
-                ctx.fillStyle = '#FFD700';
-                ctx.beginPath();
-                ctx.arc(canvas.width - 80, 80, 40, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Sun rays
-                ctx.strokeStyle = 'rgba(255, 215, 0, 0.4)';
-                ctx.lineWidth = 3;
-                for (let i = 0; i < 12; i++) {
-                    const angle = (i * Math.PI) / 6;
-                    const startX = canvas.width - 80 + Math.cos(angle) * 45;
-                    const startY = 80 + Math.sin(angle) * 45;
-                    const endX = canvas.width - 80 + Math.cos(angle) * 70;
-                    const endY = 80 + Math.sin(angle) * 70;
-                    ctx.beginPath();
-                    ctx.moveTo(startX, startY);
-                    ctx.lineTo(endX, endY);
-                    ctx.stroke();
-                }
-                
-                // Palm trees
-                this.palms.forEach(palm => {
-                    // Trunk
-                    ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(palm.x, canvas.height - palm.height - 50, 15, palm.height);
-                    
-                    // Leaves
-                    ctx.fillStyle = '#27ae60';
-                    for (let i = 0; i < 6; i++) {
-                        const angle = (i * Math.PI) / 3;
-                        ctx.beginPath();
-                        ctx.moveTo(palm.x + 7, canvas.height - palm.height - 50);
-                        ctx.lineTo(palm.x + 7 + Math.cos(angle) * 40, canvas.height - palm.height - 50 + Math.sin(angle) * 40);
-                        ctx.lineTo(palm.x + 7 + Math.cos(angle + 0.3) * 30, canvas.height - palm.height - 50 + Math.sin(angle + 0.3) * 30);
-                        ctx.closePath();
-                        ctx.fill();
-                    }
-                });
-                
                 // Buildings
                 this.buildings.forEach(building => {
-                    // Building shadow
-                    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-                    ctx.fillRect(building.x + 5, canvas.height - building.height + 5, building.width, building.height);
-                    
-                    // Building with Haitian colors
                     ctx.fillStyle = building.color;
-                    ctx.fillRect(building.x, canvas.height - building.height, building.width, building.height);
-                    
-                    // Decorative details
-                    ctx.fillStyle = '#FFD700';
-                    ctx.fillRect(building.x, canvas.height - building.height, building.width, 10);
+                    ctx.fillRect(building.x, canvas.height - building.height, 80, building.height);
                     
                     // Windows
-                    ctx.fillStyle = '#FFF';
+                    ctx.fillStyle = '#F1C40F';
                     for (let floor = 0; floor < Math.floor(building.height / 40); floor++) {
-                        for (let col = 0; col < Math.floor(building.width / 25); col++) {
-                            if (Math.random() > 0.6) {
-                                ctx.fillStyle = Math.random() > 0.5 ? '#F1C40F' : '#FFF';
-                                ctx.fillRect(
-                                    building.x + 8 + col * 25,
-                                    canvas.height - building.height + 20 + floor * 40,
-                                    15, 25
-                                );
+                        for (let col = 0; col < 3; col++) {
+                            if (Math.random() > 0.5) {
+                                ctx.fillRect(building.x + 10 + col * 25, canvas.height - building.height + 15 + floor * 40, 15, 25);
                             }
                         }
                     }
@@ -897,28 +787,10 @@
                 ctx.fillStyle = '#34495E';
                 ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
                 
-                // Street lines (Haitian flag colors)
-                ctx.fillStyle = '#00209F';
-                ctx.fillRect(0, canvas.height - 45, 40, 5);
-                ctx.fillStyle = '#D21034';
-                ctx.fillRect(80, canvas.height - 45, 40, 5);
-                ctx.fillStyle = '#00209F';
-                ctx.fillRect(160, canvas.height - 45, 40, 5);
-                ctx.fillStyle = '#D21034';
-                ctx.fillRect(240, canvas.height - 45, 40, 5);
-                
-                // Street market stalls
-                ctx.fillStyle = '#E67E22';
-                ctx.fillRect(50, canvas.height - 80, 60, 30);
-                ctx.fillRect(200, canvas.height - 90, 70, 40);
-                ctx.fillRect(350, canvas.height - 85, 65, 35);
-                
-                // Market items (colorful dots)
-                for (let i = 0; i < 20; i++) {
-                    ctx.fillStyle = ['#E74C3C', '#F1C40F', '#2ECC71', '#3498DB'][Math.floor(Math.random() * 4)];
-                    ctx.beginPath();
-                    ctx.arc(80 + Math.random() * 500, canvas.height - 70 + Math.random() * 20, 3 + Math.random() * 4, 0, Math.PI * 2);
-                    ctx.fill();
+                // Street lines
+                ctx.fillStyle = '#FFD700';
+                for (let i = 0; i < canvas.width; i += 80) {
+                    ctx.fillRect(i, canvas.height - 30, 40, 5);
                 }
             }
         }
@@ -927,16 +799,14 @@
         class FallingItem {
             constructor(type) {
                 this.type = type;
-                this.width = type === 'diplomat' ? 50 : 40;
-                this.height = type === 'diplomat' ? 70 : 50;
+                this.width = 40;
+                this.height = 40;
                 this.x = Math.random() * (canvas.width - this.width);
                 this.y = -this.height;
-                this.speed = 3 + Math.random() * 2 + (level * 0.4);
+                this.speed = 3 + Math.random() * 2;
                 this.rotation = 0;
-                this.rotationSpeed = (Math.random() - 0.5) * 0.08;
-                this.color = type === 'diplomat' ? '#E74C3C' : '#F1C40F';
-                this.glowColor = type === 'diplomat' ? 'rgba(231, 80, 57, 0.7)' : 'rgba(241, 196, 15, 0.7)';
-                this.pulse = 0;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.05;
+                this.color = type === 'diploma' ? '#FF6B00' : '#FFD700';
             }
             
             draw() {
@@ -944,36 +814,21 @@
                 ctx.translate(this.x + this.width/2, this.y + this.height/2);
                 ctx.rotate(this.rotation);
                 
-                // Pulse animation
-                this.pulse += 0.1;
-                const pulseSize = 1 + Math.sin(this.pulse) * 0.1;
-                
-                // Glow effect
-                ctx.shadowColor = this.glowColor;
-                ctx.shadowBlur = 20;
-                
-                // Main shape
+                // Item background
                 ctx.fillStyle = this.color;
-                ctx.scale(pulseSize, 1);
                 ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height);
-                ctx.scale(1/pulseSize, 1);
                 
                 // Icon
                 ctx.fillStyle = 'white';
-                ctx.font = '28px Arial';
+                ctx.font = '24px Arial';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(this.type === 'diplomat' ? '👔' : '📜', 0, 0);
+                ctx.fillText(this.type === 'diploma' ? '🎓' : '📜', 0, 0);
                 
                 // Border
                 ctx.strokeStyle = 'white';
-                ctx.lineWidth = 3;
+                ctx.lineWidth = 2;
                 ctx.strokeRect(-this.width/2, -this.height/2, this.width, this.height);
-                
-                // Type text
-                ctx.fillStyle = '#FFF';
-                ctx.font = 'bold 14px Arial';
-                ctx.fillText(this.type === 'diplomat' ? 'DIPLOMAT' : 'SÈTIFIKA', 0, -40);
                 
                 ctx.restore();
             }
@@ -981,7 +836,6 @@
             update() {
                 this.y += this.speed;
                 this.rotation += this.rotationSpeed;
-                this.x += Math.sin(Date.now() * 0.001 + this.y * 0.01) * 1;
             }
             
             isOffScreen() {
@@ -1000,38 +854,98 @@
         const background = new Background();
         const keys = {};
 
-        // Initialize game
-        function init() {
-            gameMessage.style.display = 'block';
-            messageText.textContent = 'Pouchon de Pouchon Ville';
-            messageSubtext.textContent = 'Men diplome Mr Darbouze yo!';
+        // Show hit message
+        function showHitMessageFor(text) {
+            hitText.textContent = text;
+            hitMessage.style.display = 'block';
+            showHitMessage = true;
+            hitMessageTimer = hitMessageDuration;
         }
 
-        // Start game
-        function startGame() {
-            score = 0;
-            lives = 3;
-            certificatesCollected = 0;
-            diplomatsCollected = 0;
-            level = 1;
-            gameOver = false;
-            gameRunning = true;
-            gamePaused = false;
-            fallingItems = [];
-            spawnRate = 1200;
-            player.x = canvas.width / 2 - 30;
-            player.y = canvas.height - 140;
-            showHitMessage = false;
+        // Update UI
+        function updateUI() {
+            scoreValue.textContent = score;
+            livesValue.textContent = missedItems;
+            certsValue.textContent = `${certificatesCollected}/${totalItemsNeeded}`;
+            opponentValueUI.textContent = totalItemsNeeded - opponent.collected;
+            opponentValueUI2.textContent = totalItemsNeeded - opponent.collected;
             
-            updateUI();
-            gameMessage.style.display = 'none';
-            hitMessage.style.display = 'none';
-            
-            if (animationId) {
-                cancelAnimationFrame(animationId);
+            const progress = (certificatesCollected / totalItemsNeeded) * 100;
+            hitProgress.style.width = `${progress}%`;
+        }
+
+        // Check collisions
+        function checkCollisions() {
+            for (let i = fallingItems.length - 1; i >= 0; i--) {
+                const item = fallingItems[i];
+                
+                // Player collision
+                if (item.collidesWith(player)) {
+                    fallingItems.splice(i, 1);
+                    score += 10;
+                    certificatesCollected++;
+                    
+                    if (item.type === 'diploma') {
+                        showHitMessageFor("Diplom c don Pouchon vin prend poin lol!");
+                    } else {
+                        showHitMessageFor("ranmase Sètifika, yo online et gratis nan NY pouchon!");
+                    }
+                    
+                    if (certificatesCollected >= totalItemsNeeded) {
+                        gameOver = true;
+                        showWin();
+                    }
+                    continue;
+                }
+                
+                // Pitit Pouchon collision
+                if (item.collidesWith(opponent)) {
+                    fallingItems.splice(i, 1);
+                    opponent.collected++;
+                    
+                    if (opponent.collected >= totalItemsNeeded) {
+                        gameOver = true;
+                        showLossToPititPouchon();
+                    }
+                    continue;
+                }
+                
+                // Missed item
+                if (item.isOffScreen()) {
+                    fallingItems.splice(i, 1);
+                    missedItems++;
+                    score = Math.max(0, score - 5);
+                    
+                    if (missedItems >= maxMissed) {
+                        gameOver = true;
+                        showGameOver();
+                    }
+                }
             }
-            lastTime = performance.now();
-            gameLoop();
+        }
+
+        // Win game
+        function showWin() {
+            messageText.textContent = "OU GENYEN!";
+            messageSubtext.textContent = `Ou kolekte ${certificatesCollected} bagay! Pwen final: ${score}`;
+            gameMessage.style.display = 'block';
+            gameRunning = false;
+        }
+
+        // Lose to Pitit Pouchon
+        function showLossToPititPouchon() {
+            messageText.textContent = "PITIT POUCHON GENYEN!";
+            messageSubtext.textContent = `Li kolekte ${opponent.collected} bagay! Ou te kolekte ${certificatesCollected}`;
+            gameMessage.style.display = 'block';
+            gameRunning = false;
+        }
+
+        // Game over (missed too many)
+        function showGameOver() {
+            messageText.textContent = "OU RATE TWÒP!";
+            messageSubtext.textContent = `Ou rate ${missedItems} bagay! Eseye ankò!`;
+            gameMessage.style.display = 'block';
+            gameRunning = false;
         }
 
         // Game loop
@@ -1049,115 +963,45 @@
             
             // Spawn items
             if (timestamp - lastSpawnTime > spawnRate) {
-                const types = ['diplomat', 'certificate'];
+                const types = ['diploma', 'certificate'];
                 const type = types[Math.floor(Math.random() * types.length)];
                 fallingItems.push(new FallingItem(type));
                 lastSpawnTime = timestamp;
                 
                 // Increase difficulty
-                if (score > 0 && score % 10 === 0) {
-                    level++;
-                    spawnRate = Math.max(500, spawnRate - 100);
-                }
+                spawnRate = Math.max(500, spawnRate - 20);
             }
             
             // Update and draw items
-            for (let i = fallingItems.length - 1; i >= 0; i--) {
-                const item = fallingItems[i];
+            for (let item of fallingItems) {
                 item.update();
                 item.draw();
-                
-                // Check collision
-                if (item.collidesWith(player)) {
-                    fallingItems.splice(i, 1);
-                    
-                    if (item.type === 'diplomat') {
-                        diplomatsCollected++;
-                        lives--; // Only lose life for diplomats
-                        showHitMessageFor("Pouchon de pouchon ville, men diplome Mr DARBOUZE", 6000);
-                    } else if (item.type === 'certificate') {
-                        certificatesCollected++;
-                        score += 5; // Give more points for certificates
-                        showHitMessageFor("Bagay yo pa piyay ce pa don yo yie", 6000);
-                    }
-                    
-                    updateUI();
-                    
-                    // Check win conditions
-                    if (certificatesCollected >= totalCertificatesNeeded || diplomatsCollected >= totalDiplomatsNeeded) {
-                        gameOver = true;
-                        showWin();
-                    } else if (lives <= 0) {
-                        gameOver = true;
-                        showGameOver();
-                    }
-                    continue;
-                }
-                
-                // Remove off-screen items and add score
-                if (item.isOffScreen()) {
-                    fallingItems.splice(i, 1);
-                    score += level > 3 ? 2 : 1;
-                    updateUI();
-                }
             }
             
-            // Update hit message timer
+            // Update hit message
             if (showHitMessage) {
-                hitMessageTimer += deltaTime;
-                if (hitMessageTimer >= hitMessageDuration) {
+                hitMessageTimer -= deltaTime;
+                if (hitMessageTimer <= 0) {
                     showHitMessage = false;
                     hitMessage.style.display = 'none';
                 }
             }
             
-            // Update and draw player
+            // Update players
             updatePlayer(deltaTime);
-            player.draw();
-            player.update();
+            opponent.update();
             
-            // Draw HUD
-            drawHUD();
+            // Check collisions
+            checkCollisions();
+            
+            // Draw players
+            player.draw();
+            opponent.draw();
+            
+            // Update UI
+            updateUI();
             
             animationId = requestAnimationFrame(gameLoop);
-        }
-
-        // Show win message
-        function showWin() {
-            let winMessage = "";
-            if (certificatesCollected >= totalCertificatesNeeded) {
-                winMessage = `500 Sètifika RANMASI!`;
-                messageText.textContent = "OU GENYEN!";
-            } else {
-                winMessage = `250 Diplomat RANMASI!`;
-                messageText.textContent = "OU GENYEN!";
-            }
-            messageSubtext.textContent = `${winMessage} Final: ${score} Pwen`;
-            gameMessage.style.display = 'block';
-            gameRunning = false;
-        }
-
-        // Show hit message
-        function showHitMessageFor(text, duration) {
-            hitText.textContent = text;
-            hitMessage.style.display = 'block';
-            showHitMessage = true;
-            hitMessageTimer = 0;
-            hitMessageDuration = duration;
-            
-            // Add shaking effect
-            hitMessage.style.animation = 'none';
-            setTimeout(() => {
-                hitMessage.style.animation = 'bounce 0.5s';
-            }, 10);
-        }
-
-        // Game over
-        function showGameOver() {
-            messageText.textContent = "PA GEN PLIS VI!";
-            messageSubtext.textContent = `Final: ${score} Pwen | ${certificatesCollected} Sètifika | ${diplomatsCollected} Diplomat`;
-            gameMessage.style.display = 'block';
-            gameRunning = false;
         }
 
         // Update player position
@@ -1172,74 +1016,35 @@
                 player.x = Math.min(canvas.width - player.width - 10, player.x + speed);
                 player.direction = 1;
             }
+            
+            player.update();
         }
 
-        // Draw HUD
-        function drawHUD() {
-            // Score display
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            ctx.fillRect(10, 10, 280, 110);
+        // Start game
+        function startGame() {
+            score = 0;
+            missedItems = 0;
+            certificatesCollected = 0;
+            opponent.collected = 0;
+            level = 1;
+            gameOver = false;
+            gameRunning = true;
+            gamePaused = false;
+            fallingItems = [];
+            spawnRate = 1200;
+            player.x = canvas.width / 2 - 30;
+            opponent.x = canvas.width / 3;
+            showHitMessage = false;
             
-            ctx.fillStyle = '#FFD700';
-            ctx.font = 'bold 18px Montserrat';
-            ctx.fillText(`POINTS: ${score}`, 20, 35);
-            ctx.fillText(`NIVO: ${level}`, 20, 60);
-            ctx.fillText(`SÈTIFIKA: ${certificatesCollected}/500`, 20, 85);
-            ctx.fillText(`DIPLOMAT: ${diplomatsCollected}/250`, 20, 110);
+            updateUI();
+            gameMessage.style.display = 'none';
+            hitMessage.style.display = 'none';
             
-            // Lives as hearts
-            for (let i = 0; i < lives; i++) {
-                ctx.fillStyle = '#E74C3C';
-                ctx.beginPath();
-                ctx.arc(canvas.width - 40 - i * 35, 45, 15, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillStyle = 'white';
-                ctx.font = '24px Arial';
-                ctx.fillText('❤', canvas.width - 48 - i * 35, 53);
+            if (animationId) {
+                cancelAnimationFrame(animationId);
             }
-            
-            // Pause indicator
-            if (gamePaused) {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#FFD700';
-                ctx.font = 'bold 60px Montserrat';
-                ctx.textAlign = 'center';
-                ctx.fillText('KANPE', canvas.width/2, canvas.height/2 - 50);
-                ctx.font = 'bold 30px Montserrat';
-                ctx.fillText('Peze ESPAS pou kontinye', canvas.width/2, canvas.height/2 + 30);
-                ctx.textAlign = 'left';
-            }
-            
-            // Game over overlay
-            if (gameOver) {
-                ctx.fillStyle = 'rgba(231, 76, 60, 0.9)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#FFD700';
-                ctx.font = 'bold 70px Montserrat';
-                ctx.textAlign = 'center';
-                ctx.fillText('FINI!', canvas.width/2, canvas.height/2 - 80);
-                ctx.font = 'bold 30px Montserrat';
-                ctx.fillText(`Final: ${score} Pwen`, canvas.width/2, canvas.height/2);
-                ctx.fillText(`${certificatesCollected} Sètifika | ${diplomatsCollected} Diplomat`, canvas.width/2, canvas.height/2 + 40);
-                ctx.font = 'bold 25px Montserrat';
-                ctx.fillText('Peze Antre pou rekòmanse', canvas.width/2, canvas.height/2 + 90);
-                ctx.textAlign = 'left';
-            }
-        }
-
-        // Update UI
-        function updateUI() {
-            scoreValue.textContent = score;
-            livesValue.textContent = lives;
-            certsValue.textContent = `${certificatesCollected}/${totalCertificatesNeeded}`;
-            diplomatsValue.textContent = `${diplomatsCollected}/${totalDiplomatsNeeded}`;
-            
-            // Update progress bar based on whichever is closer to completion
-            const certProgress = certificatesCollected / totalCertificatesNeeded;
-            const dipProgress = diplomatsCollected / totalDiplomatsNeeded;
-            const maxProgress = Math.max(certProgress, dipProgress) * 100;
-            hitProgress.style.width = `${maxProgress}%`;
+            lastTime = performance.now();
+            gameLoop();
         }
 
         // Keyboard controls
@@ -1300,33 +1105,12 @@
         restartBtn.addEventListener('click', startGame);
         startBtn.addEventListener('click', startGame);
 
-        // Touch controls for mobile
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const rect = canvas.getBoundingClientRect();
-            const x = touch.clientX - rect.left;
-            
-            if (x < canvas.width / 2) {
-                keys['ArrowLeft'] = true;
-                document.getElementById('keyLeft').classList.add('active');
-            } else {
-                keys['ArrowRight'] = true;
-                document.getElementById('keyRight').classList.add('active');
-            }
-        });
-
-        canvas.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            keys['ArrowLeft'] = false;
-            keys['ArrowRight'] = false;
-            document.getElementById('keyLeft').classList.remove('active');
-            document.getElementById('keyRight').classList.remove('active');
-        });
-
-        // Initialize
+        // Initialize game
         window.addEventListener('load', () => {
-            init();
+            gameMessage.style.display = 'block';
+            messageText.textContent = 'Pouchon de Pouchon Ville';
+            messageSubtext.textContent = 'Men diplome Mr Darbouze yo. Pouchon koko rat!';
+            
             // Adjust canvas size
             const container = canvas.parentElement;
             const resizeCanvas = () => {
@@ -1334,6 +1118,7 @@
                 const aspectRatio = 800/600;
                 canvas.width = containerWidth;
                 canvas.height = containerWidth / aspectRatio;
+                background.initBuildings();
             };
             
             resizeCanvas();
